@@ -7,12 +7,13 @@
 #include <02_OrderProfitToCSV.mqh>
 #include <03_ReadCommandFromCSV.mqh>
 #include <08_TerminalNumber.mqh>
+#include <096_ReadMarketTypeFromCSV.mqh>
 
 #property copyright "Copyright 2015, Black Algo Technologies Pte Ltd"
 #property copyright "Copyright 2018, Vladimir Zhbanko"
 #property link      "lucas@blackalgotechnologies.com"
 #property link      "https://vladdsm.github.io/myblog_attempt/"
-#property version   "0.001"  
+#property version   "1.001"  
 #property strict
 /* 
 
