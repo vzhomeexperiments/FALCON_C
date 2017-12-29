@@ -143,6 +143,7 @@ double HiddenVolTrailingList[][3]; // First dimension is for position ticket num
 string  InternalHeader3="----------Decision Support Variables-----------";
 bool     TradeAllowed = true; 
 datetime ReferenceTime;       //used for order history
+int     MyMarketType;         //used to recieve market status from AI
 
 //+------------------------------------------------------------------+
 //| End of Setup                                          
@@ -222,7 +223,8 @@ int start()
       //   Direction = -1; //set direction to -1 by default in order to achieve cross!
          OrderProfitToCSV(T_Num(MagicNumber));                        //write previous orders profit results for auto analysis in R
          TradeAllowed = ReadCommandFromCSV(MagicNumber);              //read command from R to make sure trading is allowed
-      //   Direction = ReadAutoPrediction(MagicNumber, -1);             //get prediction from R for trade direction         
+         MyMarketType = ReadMarketFromCSV(Symbol());
+             
         
        
      }
