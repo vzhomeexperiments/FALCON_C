@@ -231,8 +231,12 @@ int start()
 //----------Variables to be Refreshed-----------
 
    OrderNumber=0; // OrderNumber used in Entry Rules
-
-   //adapting strategy parameters for specific market period
+   //adapting strategy parameters for specific market period MARKET_NONE
+   if(MyMarketType == 0)
+     {
+       TradeAllowed = False;
+     }
+   //adapting strategy parameters for specific market period MARKET_BULLNOR
    if(MyMarketType == 1)
      {
        FastMAPeriod=9;
@@ -243,51 +247,53 @@ int start()
        VolBasedTPMultiplier = 6;
      }
 
-   //adapting strategy parameters for specific market period
+   //adapting strategy parameters for specific market period MARKET_BULLVOL
    if(MyMarketType == 2)
      {
-       FastMAPeriod=9;
-       SlowMAPeriod=30;
-       KeltnerPeriod=16;
-       KeltnerMulti=1;
-       VolBasedSLMultiplier = 3;
+       FastMAPeriod=12;
+       SlowMAPeriod=70;
+       KeltnerPeriod=19;
+       KeltnerMulti=2;
+       VolBasedSLMultiplier = 6;
        VolBasedTPMultiplier = 6;
      }
 
-   //adapting strategy parameters for specific market period
+   //adapting strategy parameters for specific market period MARKET_BEARNOR
    if(MyMarketType == 3)
      {
-       FastMAPeriod=9;
+       FastMAPeriod=8;
        SlowMAPeriod=30;
-       KeltnerPeriod=16;
+       KeltnerPeriod=12;
        KeltnerMulti=1;
        VolBasedSLMultiplier = 3;
        VolBasedTPMultiplier = 6;
-     }//adapting strategy parameters for specific market period
+     }//adapting strategy parameters for specific market period MARKET_BEARVOL
    if(MyMarketType == 4)
      {
-       FastMAPeriod=9;
-       SlowMAPeriod=30;
-       KeltnerPeriod=16;
-       KeltnerMulti=1;
-       VolBasedSLMultiplier = 3;
+       FastMAPeriod=12;
+       SlowMAPeriod=70;
+       KeltnerPeriod=19;
+       KeltnerMulti=2;
+       VolBasedSLMultiplier = 6;
        VolBasedTPMultiplier = 6;
-     }//adapting strategy parameters for specific market period
+     }//adapting strategy parameters for specific market period MARKET_RANGENOR
    if(MyMarketType == 5)
      {
+       //this strategy is not siutable for this market period
+       TradeAllowed = False;
        FastMAPeriod=9;
        SlowMAPeriod=30;
        KeltnerPeriod=16;
        KeltnerMulti=1;
        VolBasedSLMultiplier = 3;
        VolBasedTPMultiplier = 6;
-     }//adapting strategy parameters for specific market period
+     }//adapting strategy parameters for specific market period MARKET_RANGEVOL
    if(MyMarketType == 6)
      {
-       FastMAPeriod=9;
-       SlowMAPeriod=30;
-       KeltnerPeriod=16;
-       KeltnerMulti=1;
+       FastMAPeriod=13;
+       SlowMAPeriod=70;
+       KeltnerPeriod=13;
+       KeltnerMulti=3;
        VolBasedSLMultiplier = 3;
        VolBasedTPMultiplier = 6;
      }
@@ -368,7 +374,7 @@ int start()
       if(IsVolLimitBreached(IsVolLimitActivated,VolatilityMultiplier,ATRTimeframe,ATRPeriod)==False)
          if(IsMaxPositionsReached(MaxPositionsAllowed,MagicNumber,OnJournaling)==False)
            {
-            if(EntrySignal(CrossTriggered1)==1)
+            if(TradeAllowed && EntrySignal(CrossTriggered1)==1)
               { // Open Long Positions
                OrderNumber=OpenPositionMarket(OP_BUY,GetLot(IsSizingOn,Lots,Risk,YenPairAdjustFactor,Stop,P),Stop,Take,MagicNumber,Slippage,OnJournaling,P,IsECNbroker,MaxRetriesPerTick,RetryInterval);
    
@@ -386,7 +392,7 @@ int start()
              
               }
    
-            if(EntrySignal(CrossTriggered1)==2)
+            if(TradeAllowed && EntrySignal(CrossTriggered1)==2)
               { // Open Short Positions
                OrderNumber=OpenPositionMarket(OP_SELL,GetLot(IsSizingOn,Lots,Risk,YenPairAdjustFactor,Stop,P),Stop,Take,MagicNumber,Slippage,OnJournaling,P,IsECNbroker,MaxRetriesPerTick,RetryInterval);
    
