@@ -142,6 +142,7 @@ double HiddenVolTrailingList[][3]; // First dimension is for position ticket num
 
 string  InternalHeader3="----------Decision Support Variables-----------";
 bool     TradeAllowed = true; 
+bool FlagBuy, FlagSell;       //boolean flags to limit direction of trades
 datetime ReferenceTime;       //used for order history
 int     MyMarketType;         //used to recieve market status from AI
 
@@ -235,6 +236,8 @@ int start()
    if(MyMarketType == 0)
      {
        TradeAllowed = False;
+       FlagBuy = False;
+       FlagSell= False;
      }
    //adapting strategy parameters for specific market period MARKET_BULLNOR
    if(MyMarketType == 1)
@@ -245,6 +248,8 @@ int start()
        KeltnerMulti=1;
        VolBasedSLMultiplier = 3;
        VolBasedTPMultiplier = 6;
+       FlagBuy = True;
+       FlagSell= False;
      }
 
    //adapting strategy parameters for specific market period MARKET_BULLVOL
@@ -256,6 +261,8 @@ int start()
        KeltnerMulti=2;
        VolBasedSLMultiplier = 6;
        VolBasedTPMultiplier = 6;
+       FlagBuy = True;
+       FlagSell= False;
      }
 
    //adapting strategy parameters for specific market period MARKET_BEARNOR
@@ -267,6 +274,8 @@ int start()
        KeltnerMulti=1;
        VolBasedSLMultiplier = 3;
        VolBasedTPMultiplier = 6;
+       FlagBuy = False;
+       FlagSell= True;
      }//adapting strategy parameters for specific market period MARKET_BEARVOL
    if(MyMarketType == 4)
      {
@@ -276,6 +285,8 @@ int start()
        KeltnerMulti=2;
        VolBasedSLMultiplier = 6;
        VolBasedTPMultiplier = 6;
+       FlagBuy = False;
+       FlagSell= True;
      }//adapting strategy parameters for specific market period MARKET_RANGENOR
    if(MyMarketType == 5)
      {
@@ -287,6 +298,8 @@ int start()
        KeltnerMulti=1;
        VolBasedSLMultiplier = 3;
        VolBasedTPMultiplier = 6;
+       FlagBuy = False;
+       FlagSell= False;
      }//adapting strategy parameters for specific market period MARKET_RANGEVOL
    if(MyMarketType == 6)
      {
@@ -296,6 +309,8 @@ int start()
        KeltnerMulti=3;
        VolBasedSLMultiplier = 3;
        VolBasedTPMultiplier = 6;
+       FlagBuy = True;
+       FlagSell= True;
      }
 
      
@@ -374,7 +389,7 @@ int start()
       if(IsVolLimitBreached(IsVolLimitActivated,VolatilityMultiplier,ATRTimeframe,ATRPeriod)==False)
          if(IsMaxPositionsReached(MaxPositionsAllowed,MagicNumber,OnJournaling)==False)
            {
-            if(TradeAllowed && EntrySignal(CrossTriggered1)==1)
+            if(TradeAllowed && FlagBuy && EntrySignal(CrossTriggered1)==1)
               { // Open Long Positions
                OrderNumber=OpenPositionMarket(OP_BUY,GetLot(IsSizingOn,Lots,Risk,YenPairAdjustFactor,Stop,P),Stop,Take,MagicNumber,Slippage,OnJournaling,P,IsECNbroker,MaxRetriesPerTick,RetryInterval);
    
@@ -392,7 +407,7 @@ int start()
              
               }
    
-            if(TradeAllowed && EntrySignal(CrossTriggered1)==2)
+            if(TradeAllowed && FlagSell && EntrySignal(CrossTriggered1)==2)
               { // Open Short Positions
                OrderNumber=OpenPositionMarket(OP_SELL,GetLot(IsSizingOn,Lots,Risk,YenPairAdjustFactor,Stop,P),Stop,Take,MagicNumber,Slippage,OnJournaling,P,IsECNbroker,MaxRetriesPerTick,RetryInterval);
    
