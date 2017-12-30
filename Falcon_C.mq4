@@ -232,6 +232,67 @@ int start()
 
    OrderNumber=0; // OrderNumber used in Entry Rules
 
+   //adapting strategy parameters for specific market period
+   if(MyMarketType == 1)
+     {
+       FastMAPeriod=9;
+       SlowMAPeriod=30;
+       KeltnerPeriod=16;
+       KeltnerMulti=1;
+       VolBasedSLMultiplier = 3;
+       VolBasedTPMultiplier = 6;
+     }
+
+   //adapting strategy parameters for specific market period
+   if(MyMarketType == 2)
+     {
+       FastMAPeriod=9;
+       SlowMAPeriod=30;
+       KeltnerPeriod=16;
+       KeltnerMulti=1;
+       VolBasedSLMultiplier = 3;
+       VolBasedTPMultiplier = 6;
+     }
+
+   //adapting strategy parameters for specific market period
+   if(MyMarketType == 3)
+     {
+       FastMAPeriod=9;
+       SlowMAPeriod=30;
+       KeltnerPeriod=16;
+       KeltnerMulti=1;
+       VolBasedSLMultiplier = 3;
+       VolBasedTPMultiplier = 6;
+     }//adapting strategy parameters for specific market period
+   if(MyMarketType == 4)
+     {
+       FastMAPeriod=9;
+       SlowMAPeriod=30;
+       KeltnerPeriod=16;
+       KeltnerMulti=1;
+       VolBasedSLMultiplier = 3;
+       VolBasedTPMultiplier = 6;
+     }//adapting strategy parameters for specific market period
+   if(MyMarketType == 5)
+     {
+       FastMAPeriod=9;
+       SlowMAPeriod=30;
+       KeltnerPeriod=16;
+       KeltnerMulti=1;
+       VolBasedSLMultiplier = 3;
+       VolBasedTPMultiplier = 6;
+     }//adapting strategy parameters for specific market period
+   if(MyMarketType == 6)
+     {
+       FastMAPeriod=9;
+       SlowMAPeriod=30;
+       KeltnerPeriod=16;
+       KeltnerMulti=1;
+       VolBasedSLMultiplier = 3;
+       VolBasedTPMultiplier = 6;
+     }
+
+     
 //----------Entry & Exit Variables-----------
 
    FastMA1=iMA(Symbol(),Period(),FastMAPeriod,0, MODE_SMA, PRICE_CLOSE,1); // Shift 1
@@ -1018,7 +1079,7 @@ int Crossed2(double line1,double line2)
      {
       FirstTime1=false; // Change variable to false
       LastDirection1=CurrentDirection1; // Set new direction
-      return (0);
+      return (0); // there is no cross happened
      }
 
    if(CurrentDirection1!=LastDirection1 && FirstTime1==false) // If not the first time and there is a direction change
