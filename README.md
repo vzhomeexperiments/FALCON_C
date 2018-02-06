@@ -18,3 +18,10 @@ Using Deep Learning Supervised learning on time series data:
 This code is part of a larger project. You can get discounted access using the coupon code
 
 https://www.udemy.com/draft/1482458/?couponCode=LAZYTRADE6-20
+
+Join these UDEMY courses with a tremendious discount!
+
+* https://www.udemy.com/your-trading-journal/?couponCode=LAZYTRADE-GIT
+* https://www.udemy.com/your-trading-robot/?couponCode=LAZYTRADE-GIT
+* https://www.udemy.com/your-home-trading-environment/?couponCode=LAZYTRADE-GIT
+
