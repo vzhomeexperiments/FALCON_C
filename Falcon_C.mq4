@@ -20,7 +20,13 @@
 Falcon C: 
 - Adding specific functions to manage Decision Support System
 - Adding market recognition interface using Deep Learning
-
+# Market Periods
+# 1. Bull normal BUN
+# 2. Bull volatile BUV
+# 3. Bear normal BEN
+# 4. Bear volatile BEV
+# 5. Sideways quiet RAN
+# 6. Sideways volatile RAV
 */
 
 //+------------------------------------------------------------------+
@@ -34,11 +40,65 @@ extern int     Slippage=3; // In Pips
 extern bool    IsECNbroker = false; // Is your broker an ECN
 extern bool    OnJournaling = true; // Add EA updates in the Journal Tab
 
-extern string  Header1="----------Trading Rules Variables-----------";
+extern string  Header1="----------Trading Rules Variables Standard-----------";
 extern int     FastMAPeriod=10;
 extern int     SlowMAPeriod=40;
 extern int     KeltnerPeriod=15;
 extern int     KeltnerMulti=3;
+
+extern string  Header1_1="----------Trading Rules Variables Market Bull normal BUN-----------";
+extern bool    isTradeBUN = True;
+extern int     FastMAPeriodBUN=10;
+extern int     SlowMAPeriodBUN=40;
+extern int     KeltnerPeriodBUN=15;
+extern int     KeltnerMultiBUN=3;
+extern double  VolBasedSLMultiplierBUN=2; // Stop Loss Amount in units of Volatility
+extern double  VolBasedTPMultiplierBUN=4; // Take Profit Amount in units of Volatility
+
+extern string  Header1_2="----------Trading Rules Variables Market Bull volatile BUV-----------";
+extern bool    isTradeBUV = True;
+extern int     FastMAPeriodBUV=60;
+extern int     SlowMAPeriodBUV=100;
+extern int     KeltnerPeriodBUV=100;
+extern int     KeltnerMultiBUV=5;
+extern double  VolBasedSLMultiplierBUV=3; // Stop Loss Amount in units of Volatility
+extern double  VolBasedTPMultiplierBUV=6; // Take Profit Amount in units of Volatility
+
+extern string  Header1_3="----------Trading Rules Variables Market Bear normal BEN-----------";
+extern bool    isTradeBEN = True;
+extern int     FastMAPeriodBEN=10;
+extern int     SlowMAPeriodBEN=40;
+extern int     KeltnerPeriodBEN=15;
+extern int     KeltnerMultiBEN=3;
+extern double  VolBasedSLMultiplierBEN=2; // Stop Loss Amount in units of Volatility
+extern double  VolBasedTPMultiplierBEN=4; // Take Profit Amount in units of Volatility
+
+extern string  Header1_4="----------Trading Rules Variables Market Bear volatile BEV-----------";
+extern bool    isTradeBEV = True;
+extern int     FastMAPeriodBEV=60;
+extern int     SlowMAPeriodBEV=100;
+extern int     KeltnerPeriodBEV=100;
+extern int     KeltnerMultiBEV=5;
+extern double  VolBasedSLMultiplierBEV=3; // Stop Loss Amount in units of Volatility
+extern double  VolBasedTPMultiplierBEV=6; // Take Profit Amount in units of Volatility
+
+extern string  Header1_5="----------Trading Rules Variables Market Sideways quiet RAN-----------";
+extern bool    isTradeRAN = True;
+extern int     FastMAPeriodRAN=50;
+extern int     SlowMAPeriodRAN=20;
+extern int     KeltnerPeriodRAN=20;
+extern int     KeltnerMultiRAN=3;
+extern double  VolBasedSLMultiplierRAN=4; // Stop Loss Amount in units of Volatility
+extern double  VolBasedTPMultiplierRAN=6; // Take Profit Amount in units of Volatility
+
+extern string  Header1_6="----------Trading Rules Variables Market Sideways volatile RAV-----------";
+extern bool    isTradeRAV = True;
+extern int     FastMAPeriodRAV=10;
+extern int     SlowMAPeriodRAV=50;
+extern int     KeltnerPeriodRAV=200;
+extern int     KeltnerMultiRAV=7;
+extern double  VolBasedSLMultiplierRAV=3; // Stop Loss Amount in units of Volatility
+extern double  VolBasedTPMultiplierRAV=6; // Take Profit Amount in units of Volatility
 
 extern string  Header2="----------Position Sizing Settings-----------";
 extern string  Lot_explanation="If IsSizingOn = true, Lots variable will be ignored";
@@ -225,8 +285,6 @@ int start()
          OrderProfitToCSV(T_Num(MagicNumber));                        //write previous orders profit results for auto analysis in R
          TradeAllowed = ReadCommandFromCSV(MagicNumber);              //read command from R to make sure trading is allowed
          MyMarketType = ReadMarketFromCSV(Symbol());
-             
-        
        
      }
 //----------Variables to be Refreshed-----------
@@ -239,78 +297,96 @@ int start()
        FlagBuy = False;
        FlagSell= False;
      }
-   //adapting strategy parameters for specific market period MARKET_BULLNOR
+     
+
+   //adapting strategy parameters for specific market periods
    if(MyMarketType == 1)
      {
-       FastMAPeriod=9;
-       SlowMAPeriod=30;
-       KeltnerPeriod=16;
-       KeltnerMulti=1;
-       VolBasedSLMultiplier = 3;
-       VolBasedTPMultiplier = 6;
+       //generic rules of the trading period
+       TradeAllowed = isTradeBUN;
        FlagBuy = True;
        FlagSell= False;
+       //assign new trading strategy parameter       
+       FastMAPeriod=FastMAPeriodBUN;
+       SlowMAPeriod=SlowMAPeriodBUN;
+       KeltnerPeriod=KeltnerPeriodBUN;
+       KeltnerMulti=KeltnerMultiBUN;
+       VolBasedSLMultiplier = VolBasedSLMultiplierBUN;
+       VolBasedTPMultiplier = VolBasedTPMultiplierBUN;
      }
 
    //adapting strategy parameters for specific market period MARKET_BULLVOL
    if(MyMarketType == 2)
      {
-       FastMAPeriod=12;
-       SlowMAPeriod=70;
-       KeltnerPeriod=19;
-       KeltnerMulti=2;
-       VolBasedSLMultiplier = 6;
-       VolBasedTPMultiplier = 6;
+       //generic rules of the trading period
+       TradeAllowed = isTradeBUV;
        FlagBuy = True;
        FlagSell= False;
+       //assign new trading strategy parameter       
+       FastMAPeriod=FastMAPeriodBUV;
+       SlowMAPeriod=SlowMAPeriodBUV;
+       KeltnerPeriod=KeltnerPeriodBUV;
+       KeltnerMulti=KeltnerMultiBUV;
+       VolBasedSLMultiplier = VolBasedSLMultiplierBUV;
+       VolBasedTPMultiplier = VolBasedTPMultiplierBUV;
      }
 
    //adapting strategy parameters for specific market period MARKET_BEARNOR
    if(MyMarketType == 3)
      {
-       FastMAPeriod=8;
-       SlowMAPeriod=30;
-       KeltnerPeriod=12;
-       KeltnerMulti=1;
-       VolBasedSLMultiplier = 3;
-       VolBasedTPMultiplier = 6;
+       //generic rules of the trading period
+       TradeAllowed = isTradeBEN;
        FlagBuy = False;
        FlagSell= True;
+       //assign new trading strategy parameter       
+       FastMAPeriod=FastMAPeriodBEN;
+       SlowMAPeriod=SlowMAPeriodBEN;
+       KeltnerPeriod=KeltnerPeriodBEN;
+       KeltnerMulti=KeltnerMultiBEN;
+       VolBasedSLMultiplier = VolBasedSLMultiplierBEN;
+       VolBasedTPMultiplier = VolBasedTPMultiplierBEN;
      }//adapting strategy parameters for specific market period MARKET_BEARVOL
    if(MyMarketType == 4)
      {
-       FastMAPeriod=12;
-       SlowMAPeriod=70;
-       KeltnerPeriod=19;
-       KeltnerMulti=2;
-       VolBasedSLMultiplier = 6;
-       VolBasedTPMultiplier = 6;
+       //generic rules of the trading period
+       TradeAllowed = isTradeBEV;
        FlagBuy = False;
        FlagSell= True;
+       //assign new trading strategy parameter       
+       FastMAPeriod=FastMAPeriodBEV;
+       SlowMAPeriod=SlowMAPeriodBEV;
+       KeltnerPeriod=KeltnerPeriodBEV;
+       KeltnerMulti=KeltnerMultiBEV;
+       VolBasedSLMultiplier = VolBasedSLMultiplierBEV;
+       VolBasedTPMultiplier = VolBasedTPMultiplierBEV;
      }//adapting strategy parameters for specific market period MARKET_RANGENOR
    if(MyMarketType == 5)
      {
-       //this strategy is not siutable for this market period
-       TradeAllowed = False;
-       FastMAPeriod=9;
-       SlowMAPeriod=30;
-       KeltnerPeriod=16;
-       KeltnerMulti=1;
-       VolBasedSLMultiplier = 3;
-       VolBasedTPMultiplier = 6;
-       FlagBuy = False;
-       FlagSell= False;
+       //generic rules of the trading period
+       TradeAllowed = isTradeRAN;
+       FlagBuy = True;
+       FlagSell= True;
+       //assign new trading strategy parameter       
+       FastMAPeriod=FastMAPeriodRAN;
+       SlowMAPeriod=SlowMAPeriodRAN;
+       KeltnerPeriod=KeltnerPeriodRAN;
+       KeltnerMulti=KeltnerMultiRAN;
+       VolBasedSLMultiplier = VolBasedSLMultiplierRAN;
+       VolBasedTPMultiplier = VolBasedTPMultiplierRAN;
      }//adapting strategy parameters for specific market period MARKET_RANGEVOL
    if(MyMarketType == 6)
      {
-       FastMAPeriod=13;
-       SlowMAPeriod=70;
-       KeltnerPeriod=13;
-       KeltnerMulti=3;
-       VolBasedSLMultiplier = 3;
-       VolBasedTPMultiplier = 6;
+       //generic rules of the trading period
+       TradeAllowed = isTradeRAV;
        FlagBuy = True;
        FlagSell= True;
+       //assign new trading strategy parameter       
+       FastMAPeriod=FastMAPeriodRAV;
+       SlowMAPeriod=SlowMAPeriodRAV;
+       KeltnerPeriod=KeltnerPeriodRAV;
+       KeltnerMulti=KeltnerMultiRAV;
+       VolBasedSLMultiplier = VolBasedSLMultiplierRAV;
+       VolBasedTPMultiplier = VolBasedTPMultiplierRAV;
      }
 
      
