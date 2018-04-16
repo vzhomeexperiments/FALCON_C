@@ -48,54 +48,54 @@ extern int     KeltnerMulti=3;
 
 extern string  Header1_1="----------Trading Rules Variables Market Bull normal BUN-----------";
 extern bool    isTradeBUN = True;
-extern int     FastMAPeriodBUN=10;
-extern int     SlowMAPeriodBUN=40;
-extern int     KeltnerPeriodBUN=15;
-extern int     KeltnerMultiBUN=3;
-extern double  VolBasedSLMultiplierBUN=2; // Stop Loss Amount in units of Volatility
+extern int     FastMAPeriodBUN=60;
+extern int     SlowMAPeriodBUN=100;
+extern int     KeltnerPeriodBUN=16;
+extern int     KeltnerMultiBUN=5;
+extern double  VolBasedSLMultiplierBUN=3; // Stop Loss Amount in units of Volatility
 extern double  VolBasedTPMultiplierBUN=4; // Take Profit Amount in units of Volatility
 
 extern string  Header1_2="----------Trading Rules Variables Market Bull volatile BUV-----------";
 extern bool    isTradeBUV = True;
-extern int     FastMAPeriodBUV=60;
-extern int     SlowMAPeriodBUV=100;
+extern int     FastMAPeriodBUV=20;
+extern int     SlowMAPeriodBUV=180;
 extern int     KeltnerPeriodBUV=100;
 extern int     KeltnerMultiBUV=5;
-extern double  VolBasedSLMultiplierBUV=3; // Stop Loss Amount in units of Volatility
-extern double  VolBasedTPMultiplierBUV=6; // Take Profit Amount in units of Volatility
+extern double  VolBasedSLMultiplierBUV=7; // Stop Loss Amount in units of Volatility
+extern double  VolBasedTPMultiplierBUV=7; // Take Profit Amount in units of Volatility
 
 extern string  Header1_3="----------Trading Rules Variables Market Bear normal BEN-----------";
 extern bool    isTradeBEN = True;
 extern int     FastMAPeriodBEN=10;
-extern int     SlowMAPeriodBEN=40;
-extern int     KeltnerPeriodBEN=15;
-extern int     KeltnerMultiBEN=3;
-extern double  VolBasedSLMultiplierBEN=2; // Stop Loss Amount in units of Volatility
-extern double  VolBasedTPMultiplierBEN=4; // Take Profit Amount in units of Volatility
+extern int     SlowMAPeriodBEN=220;
+extern int     KeltnerPeriodBEN=220;
+extern int     KeltnerMultiBEN=8;
+extern double  VolBasedSLMultiplierBEN=4; // Stop Loss Amount in units of Volatility
+extern double  VolBasedTPMultiplierBEN=7; // Take Profit Amount in units of Volatility
 
 extern string  Header1_4="----------Trading Rules Variables Market Bear volatile BEV-----------";
 extern bool    isTradeBEV = True;
-extern int     FastMAPeriodBEV=60;
-extern int     SlowMAPeriodBEV=100;
+extern int     FastMAPeriodBEV=20;
+extern int     SlowMAPeriodBEV=180;
 extern int     KeltnerPeriodBEV=100;
 extern int     KeltnerMultiBEV=5;
-extern double  VolBasedSLMultiplierBEV=3; // Stop Loss Amount in units of Volatility
-extern double  VolBasedTPMultiplierBEV=6; // Take Profit Amount in units of Volatility
+extern double  VolBasedSLMultiplierBEV=7; // Stop Loss Amount in units of Volatility
+extern double  VolBasedTPMultiplierBEV=7; // Take Profit Amount in units of Volatility
 
 extern string  Header1_5="----------Trading Rules Variables Market Sideways quiet RAN-----------";
 extern bool    isTradeRAN = True;
 extern int     FastMAPeriodRAN=50;
-extern int     SlowMAPeriodRAN=20;
-extern int     KeltnerPeriodRAN=20;
-extern int     KeltnerMultiRAN=3;
-extern double  VolBasedSLMultiplierRAN=4; // Stop Loss Amount in units of Volatility
-extern double  VolBasedTPMultiplierRAN=6; // Take Profit Amount in units of Volatility
+extern int     SlowMAPeriodRAN=10;
+extern int     KeltnerPeriodRAN=40;
+extern int     KeltnerMultiRAN=5;
+extern double  VolBasedSLMultiplierRAN=9; // Stop Loss Amount in units of Volatility
+extern double  VolBasedTPMultiplierRAN=4; // Take Profit Amount in units of Volatility
 
 extern string  Header1_6="----------Trading Rules Variables Market Sideways volatile RAV-----------";
 extern bool    isTradeRAV = True;
-extern int     FastMAPeriodRAV=10;
-extern int     SlowMAPeriodRAV=50;
-extern int     KeltnerPeriodRAV=200;
+extern int     FastMAPeriodRAV=50;
+extern int     SlowMAPeriodRAV=10;
+extern int     KeltnerPeriodRAV=160;
 extern int     KeltnerMultiRAV=7;
 extern double  VolBasedSLMultiplierRAV=3; // Stop Loss Amount in units of Volatility
 extern double  VolBasedTPMultiplierRAV=6; // Take Profit Amount in units of Volatility
@@ -284,14 +284,14 @@ int start()
       //   Direction = -1; //set direction to -1 by default in order to achieve cross!
          OrderProfitToCSV(T_Num(MagicNumber));                        //write previous orders profit results for auto analysis in R
          TradeAllowed = ReadCommandFromCSV(MagicNumber);              //read command from R to make sure trading is allowed
-         MyMarketType = ReadMarketFromCSV(Symbol());
+         MyMarketType = ReadMarketFromCSV(Symbol(), 15);                  //read analytical output from the Decision Support System
        
      }
 //----------Variables to be Refreshed-----------
 
    OrderNumber=0; // OrderNumber used in Entry Rules
    //adapting strategy parameters for specific market period MARKET_NONE
-   if(MyMarketType == 0)
+   if(MyMarketType == MARKET_NONE)
      {
        TradeAllowed = False;
        FlagBuy = False;
@@ -300,7 +300,7 @@ int start()
      
 
    //adapting strategy parameters for specific market periods
-   if(MyMarketType == 1)
+   if(MyMarketType == MARKET_BUN)
      {
        //generic rules of the trading period
        TradeAllowed = isTradeBUN;
@@ -316,7 +316,7 @@ int start()
      }
 
    //adapting strategy parameters for specific market period MARKET_BULLVOL
-   if(MyMarketType == 2)
+   if(MyMarketType == MARKET_BUV)
      {
        //generic rules of the trading period
        TradeAllowed = isTradeBUV;
@@ -332,7 +332,7 @@ int start()
      }
 
    //adapting strategy parameters for specific market period MARKET_BEARNOR
-   if(MyMarketType == 3)
+   if(MyMarketType == MARKET_BEN)
      {
        //generic rules of the trading period
        TradeAllowed = isTradeBEN;
@@ -346,7 +346,7 @@ int start()
        VolBasedSLMultiplier = VolBasedSLMultiplierBEN;
        VolBasedTPMultiplier = VolBasedTPMultiplierBEN;
      }//adapting strategy parameters for specific market period MARKET_BEARVOL
-   if(MyMarketType == 4)
+   if(MyMarketType == MARKET_BEV)
      {
        //generic rules of the trading period
        TradeAllowed = isTradeBEV;
@@ -360,7 +360,7 @@ int start()
        VolBasedSLMultiplier = VolBasedSLMultiplierBEV;
        VolBasedTPMultiplier = VolBasedTPMultiplierBEV;
      }//adapting strategy parameters for specific market period MARKET_RANGENOR
-   if(MyMarketType == 5)
+   if(MyMarketType == MARKET_RAN)
      {
        //generic rules of the trading period
        TradeAllowed = isTradeRAN;
@@ -374,7 +374,7 @@ int start()
        VolBasedSLMultiplier = VolBasedSLMultiplierRAN;
        VolBasedTPMultiplier = VolBasedTPMultiplierRAN;
      }//adapting strategy parameters for specific market period MARKET_RANGEVOL
-   if(MyMarketType == 6)
+   if(MyMarketType == MARKET_RAV)
      {
        //generic rules of the trading period
        TradeAllowed = isTradeRAV;
