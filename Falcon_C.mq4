@@ -48,12 +48,12 @@ extern int     KeltnerMulti=3;
 
 extern string  Header1_1="----------Trading Rules Variables Market Bull normal BUN-----------";
 extern bool    isTradeBUN = True;
-extern int     FastMAPeriodBUN=60;
-extern int     SlowMAPeriodBUN=100;
-extern int     KeltnerPeriodBUN=16;
+extern int     FastMAPeriodBUN=10;
+extern int     SlowMAPeriodBUN=140;
+extern int     KeltnerPeriodBUN=160;
 extern int     KeltnerMultiBUN=5;
-extern double  VolBasedSLMultiplierBUN=3; // Stop Loss Amount in units of Volatility
-extern double  VolBasedTPMultiplierBUN=4; // Take Profit Amount in units of Volatility
+extern double  VolBasedSLMultiplierBUN=4; // Stop Loss Amount in units of Volatility
+extern double  VolBasedTPMultiplierBUN=6; // Take Profit Amount in units of Volatility
 
 extern string  Header1_2="----------Trading Rules Variables Market Bull volatile BUV-----------";
 extern bool    isTradeBUV = True;
@@ -61,17 +61,17 @@ extern int     FastMAPeriodBUV=20;
 extern int     SlowMAPeriodBUV=180;
 extern int     KeltnerPeriodBUV=100;
 extern int     KeltnerMultiBUV=5;
-extern double  VolBasedSLMultiplierBUV=7; // Stop Loss Amount in units of Volatility
+extern double  VolBasedSLMultiplierBUV=5; // Stop Loss Amount in units of Volatility
 extern double  VolBasedTPMultiplierBUV=7; // Take Profit Amount in units of Volatility
 
 extern string  Header1_3="----------Trading Rules Variables Market Bear normal BEN-----------";
 extern bool    isTradeBEN = True;
 extern int     FastMAPeriodBEN=10;
-extern int     SlowMAPeriodBEN=220;
-extern int     KeltnerPeriodBEN=220;
-extern int     KeltnerMultiBEN=8;
+extern int     SlowMAPeriodBEN=140;
+extern int     KeltnerPeriodBEN=160;
+extern int     KeltnerMultiBEN=5;
 extern double  VolBasedSLMultiplierBEN=4; // Stop Loss Amount in units of Volatility
-extern double  VolBasedTPMultiplierBEN=7; // Take Profit Amount in units of Volatility
+extern double  VolBasedTPMultiplierBEN=6; // Take Profit Amount in units of Volatility
 
 extern string  Header1_4="----------Trading Rules Variables Market Bear volatile BEV-----------";
 extern bool    isTradeBEV = True;
@@ -79,26 +79,26 @@ extern int     FastMAPeriodBEV=20;
 extern int     SlowMAPeriodBEV=180;
 extern int     KeltnerPeriodBEV=100;
 extern int     KeltnerMultiBEV=5;
-extern double  VolBasedSLMultiplierBEV=7; // Stop Loss Amount in units of Volatility
+extern double  VolBasedSLMultiplierBEV=5; // Stop Loss Amount in units of Volatility
 extern double  VolBasedTPMultiplierBEV=7; // Take Profit Amount in units of Volatility
 
 extern string  Header1_5="----------Trading Rules Variables Market Sideways quiet RAN-----------";
 extern bool    isTradeRAN = True;
-extern int     FastMAPeriodRAN=50;
+extern int     FastMAPeriodRAN=140;
 extern int     SlowMAPeriodRAN=10;
-extern int     KeltnerPeriodRAN=40;
+extern int     KeltnerPeriodRAN=160;
 extern int     KeltnerMultiRAN=5;
-extern double  VolBasedSLMultiplierRAN=9; // Stop Loss Amount in units of Volatility
-extern double  VolBasedTPMultiplierRAN=4; // Take Profit Amount in units of Volatility
+extern double  VolBasedSLMultiplierRAN=3; // Stop Loss Amount in units of Volatility
+extern double  VolBasedTPMultiplierRAN=6; // Take Profit Amount in units of Volatility
 
 extern string  Header1_6="----------Trading Rules Variables Market Sideways volatile RAV-----------";
 extern bool    isTradeRAV = True;
-extern int     FastMAPeriodRAV=50;
-extern int     SlowMAPeriodRAV=10;
-extern int     KeltnerPeriodRAV=160;
+extern int     FastMAPeriodRAV=180;
+extern int     SlowMAPeriodRAV=20;
+extern int     KeltnerPeriodRAV=100;
 extern int     KeltnerMultiRAV=7;
-extern double  VolBasedSLMultiplierRAV=3; // Stop Loss Amount in units of Volatility
-extern double  VolBasedTPMultiplierRAV=6; // Take Profit Amount in units of Volatility
+extern double  VolBasedSLMultiplierRAV=5; // Stop Loss Amount in units of Volatility
+extern double  VolBasedTPMultiplierRAV=7; // Take Profit Amount in units of Volatility
 
 extern string  Header2="----------Position Sizing Settings-----------";
 extern string  Lot_explanation="If IsSizingOn = true, Lots variable will be ignored";
