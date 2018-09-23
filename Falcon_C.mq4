@@ -9,6 +9,7 @@
 #include <08_TerminalNumber.mqh>
 #include <096_ReadMarketTypeFromCSV.mqh>
 #include <16_LogMarketType.mqh>
+#include <17_CheckIfMarketTypePolicyIsOn.mqh>
 
 #property copyright "Copyright 2015, Black Algo Technologies Pte Ltd"
 #property copyright "Copyright 2018, Vladimir Zhbanko"
@@ -203,6 +204,7 @@ double HiddenVolTrailingList[][3]; // First dimension is for position ticket num
 
 string  InternalHeader3="----------Decision Support Variables-----------";
 bool     TradeAllowed = true; 
+bool     isMarketTypePolicyON = true;
 bool FlagBuy, FlagSell;       //boolean flags to limit direction of trades
 datetime ReferenceTime;       //used for order history
 int     MyMarketType;         //used to recieve market status from AI
@@ -285,6 +287,12 @@ int start()
          //   Direction = -1; //set direction to -1 by default in order to achieve cross!
          OrderProfitToCSV(T_Num(MagicNumber));                        //write previous orders profit results for auto analysis in R
          MyMarketType = ReadMarketFromCSV(Symbol(), 15);                  //read analytical output from the Decision Support System
+         //get the Reinforcement Learning policy for specific Market Type
+         if(TerminalType == 0)
+           {
+            isMarketTypePolicyON = CheckIfMarketTypePolicyIsOn(MagicNumber, MyMarketType);
+           }
+           
          //adapting strategy parameters for specific market period MARKET_NONE
          if(MyMarketType == MARKET_NONE)
            {
@@ -468,7 +476,7 @@ int start()
       if(IsVolLimitBreached(IsVolLimitActivated,VolatilityMultiplier,ATRTimeframe,ATRPeriod)==False)
          if(IsMaxPositionsReached(MaxPositionsAllowed,MagicNumber,OnJournaling)==False)
            {
-            if(TradeAllowed && FlagBuy && EntrySignal(CrossTriggered1)==1)
+            if(TradeAllowed && isMarketTypePolicyON && FlagBuy && EntrySignal(CrossTriggered1)==1)
               { // Open Long Positions
                OrderNumber=OpenPositionMarket(OP_BUY,GetLot(IsSizingOn,Lots,Risk,YenPairAdjustFactor,Stop,P),Stop,Take,MagicNumber,Slippage,OnJournaling,P,IsECNbroker,MaxRetriesPerTick,RetryInterval);
                
@@ -489,7 +497,7 @@ int start()
              
               }
    
-            if(TradeAllowed && FlagSell && EntrySignal(CrossTriggered1)==2)
+            if(TradeAllowed && isMarketTypePolicyON && FlagSell && EntrySignal(CrossTriggered1)==2)
               { // Open Short Positions
                OrderNumber=OpenPositionMarket(OP_SELL,GetLot(IsSizingOn,Lots,Risk,YenPairAdjustFactor,Stop,P),Stop,Take,MagicNumber,Slippage,OnJournaling,P,IsECNbroker,MaxRetriesPerTick,RetryInterval);
                
