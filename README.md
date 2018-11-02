@@ -1,27 +1,25 @@
 # FALCON_C
 
-# Purpose
+Designed to work best with Decision Support System developed inside Lazy Trading Project
 
-This repository is dedicated to enhance Trading Robot with Market Status recognition
+https://vladdsm.github.io/myblog_attempt/topics/lazy%20trading/
 
-# Methodology
+# Introduction
 
-Using Deep Learning Supervised learning on time series data:
+Rule-based trading robot. Main features are listed below:
 
-* pre-train Deep Learning on previously selected labelled markets. 
-* MACD metric is used as a sole asset metric considered for the model
-* New data are fit continously to the model and it tries to recognise the market.
-* Market status is supplied further to the MQL 4 trading strategy (see separate repository)
+* Capability to contain different rules for different Market Types
+* Market Type recognized Using Deep Learning Supervised Classification Model on time series data (code is in separate repository):
+- R code using h2o deep learning framework
+- pre-train Deep Learning on previously selected labelled markets. 
+- MACD metric is used as a sole asset metric considered for the model
+- New data are fit continuously to the model and it tries to recognize the market.
+- Market status is supplied further to the MQL 4 trading strategy
 
-# Want to learn how to apply this code?
+# Reference
 
-This code is part of a larger project. You can get discounted access using the coupon code
+Functionality of this EA is explained in the Udemy course [Lazy Trading Part 6: Detect Market status with AI](https://www.udemy.com/detect-market-status-with-ai/?couponCode=LAZYTRADE6-10)
 
-https://www.udemy.com/draft/1482458/?couponCode=LAZYTRADE6-20
+# Disclaimer
 
-Join these UDEMY courses with a tremendious discount!
-
-* https://www.udemy.com/your-trading-journal/?couponCode=LAZYTRADE-GIT
-* https://www.udemy.com/your-trading-robot/?couponCode=LAZYTRADE-GIT
-* https://www.udemy.com/your-home-trading-environment/?couponCode=LAZYTRADE-GIT
-
+Use on your own risk: past performance is no guarantee of the future results!
