@@ -12,10 +12,10 @@
 #include <17_CheckIfMarketTypePolicyIsOn.mqh>
 
 #property copyright "Copyright 2015, Black Algo Technologies Pte Ltd"
-#property copyright "Copyright 2018, Vladimir Zhbanko"
+#property copyright "Copyright 2019, Vladimir Zhbanko"
 #property link      "lucas@blackalgotechnologies.com"
 #property link      "https://vladdsm.github.io/myblog_attempt/"
-#property version   "1.001"  
+#property version   "1.002"  
 #property strict
 /* 
 
@@ -29,6 +29,9 @@ Falcon C:
 # 4. Bear volatile BEV
 # 5. Sideways quiet RAN
 # 6. Sideways volatile RAV
+
+- Version 1.002 will 'decide' if trade or not in specific market types based on Reinforcement learning
+
 */
 
 //+------------------------------------------------------------------+
@@ -47,9 +50,9 @@ extern int     FastMAPeriod=10;
 extern int     SlowMAPeriod=40;
 extern int     KeltnerPeriod=15;
 extern int     KeltnerMulti=3;
+extern bool    use_market_type         =false;
 
 extern string  Header1_1="----------Trading Rules Variables Market Bull normal BUN-----------";
-extern bool    isTradeBUN = True;
 extern int     FastMAPeriodBUN=10;
 extern int     SlowMAPeriodBUN=140;
 extern int     KeltnerPeriodBUN=160;
@@ -58,7 +61,6 @@ extern double  VolBasedSLMultiplierBUN=4; // Stop Loss Amount in units of Volati
 extern double  VolBasedTPMultiplierBUN=6; // Take Profit Amount in units of Volatility
 
 extern string  Header1_2="----------Trading Rules Variables Market Bull volatile BUV-----------";
-extern bool    isTradeBUV = True;
 extern int     FastMAPeriodBUV=20;
 extern int     SlowMAPeriodBUV=180;
 extern int     KeltnerPeriodBUV=100;
@@ -67,7 +69,6 @@ extern double  VolBasedSLMultiplierBUV=5; // Stop Loss Amount in units of Volati
 extern double  VolBasedTPMultiplierBUV=7; // Take Profit Amount in units of Volatility
 
 extern string  Header1_3="----------Trading Rules Variables Market Bear normal BEN-----------";
-extern bool    isTradeBEN = True;
 extern int     FastMAPeriodBEN=10;
 extern int     SlowMAPeriodBEN=140;
 extern int     KeltnerPeriodBEN=160;
@@ -76,7 +77,6 @@ extern double  VolBasedSLMultiplierBEN=4; // Stop Loss Amount in units of Volati
 extern double  VolBasedTPMultiplierBEN=6; // Take Profit Amount in units of Volatility
 
 extern string  Header1_4="----------Trading Rules Variables Market Bear volatile BEV-----------";
-extern bool    isTradeBEV = True;
 extern int     FastMAPeriodBEV=20;
 extern int     SlowMAPeriodBEV=180;
 extern int     KeltnerPeriodBEV=100;
@@ -85,7 +85,6 @@ extern double  VolBasedSLMultiplierBEV=5; // Stop Loss Amount in units of Volati
 extern double  VolBasedTPMultiplierBEV=7; // Take Profit Amount in units of Volatility
 
 extern string  Header1_5="----------Trading Rules Variables Market Sideways quiet RAN-----------";
-extern bool    isTradeRAN = True;
 extern int     FastMAPeriodRAN=140;
 extern int     SlowMAPeriodRAN=10;
 extern int     KeltnerPeriodRAN=160;
@@ -94,7 +93,6 @@ extern double  VolBasedSLMultiplierRAN=3; // Stop Loss Amount in units of Volati
 extern double  VolBasedTPMultiplierRAN=6; // Take Profit Amount in units of Volatility
 
 extern string  Header1_6="----------Trading Rules Variables Market Sideways volatile RAV-----------";
-extern bool    isTradeRAV = True;
 extern int     FastMAPeriodRAV=180;
 extern int     SlowMAPeriodRAV=20;
 extern int     KeltnerPeriodRAV=100;
@@ -288,10 +286,20 @@ int start()
          OrderProfitToCSV(T_Num(MagicNumber));                        //write previous orders profit results for auto analysis in R
          MyMarketType = ReadMarketFromCSV(Symbol(), 15);                  //read analytical output from the Decision Support System
          //get the Reinforcement Learning policy for specific Market Type
-         if(TerminalType == 0)
+         if(TerminalType == 0 && use_market_type == true)
            {
+            /*
+            Notes:
+            - Terminal 1 will always trade in all market types
+            - Terminal 0 will be only trading by using market type information
+            - Market Type Policy will be enabled from Reinforcement Learning Model
+            */
             isMarketTypePolicyON = CheckIfMarketTypePolicyIsOn(MagicNumber, MyMarketType);
-           }
+           } else
+               {
+                //for Terminal 1 we will keep trading with all market types
+                isMarketTypePolicyON = true;
+               }
            
          //adapting strategy parameters for specific market period MARKET_NONE
          if(MyMarketType == MARKET_NONE)
@@ -305,7 +313,6 @@ int start()
          if(MyMarketType == MARKET_BUN)
            {
              //generic rules of the trading period
-             TradeAllowed = isTradeBUN;
              FlagBuy = True;
              FlagSell= False;
              //assign new trading strategy parameter       
@@ -321,7 +328,6 @@ int start()
          if(MyMarketType == MARKET_BUV)
            {
              //generic rules of the trading period
-             TradeAllowed = isTradeBUV;
              FlagBuy = True;
              FlagSell= False;
              //assign new trading strategy parameter       
@@ -337,7 +343,6 @@ int start()
          if(MyMarketType == MARKET_BEN)
            {
              //generic rules of the trading period
-             TradeAllowed = isTradeBEN;
              FlagBuy = False;
              FlagSell= True;
              //assign new trading strategy parameter       
@@ -351,7 +356,6 @@ int start()
          if(MyMarketType == MARKET_BEV)
            {
              //generic rules of the trading period
-             TradeAllowed = isTradeBEV;
              FlagBuy = False;
              FlagSell= True;
              //assign new trading strategy parameter       
@@ -365,7 +369,6 @@ int start()
          if(MyMarketType == MARKET_RAN)
            {
              //generic rules of the trading period
-             TradeAllowed = isTradeRAN;
              FlagBuy = True;
              FlagSell= True;
              //assign new trading strategy parameter       
@@ -379,7 +382,6 @@ int start()
          if(MyMarketType == MARKET_RAV)
            {
              //generic rules of the trading period
-             TradeAllowed = isTradeRAV;
              FlagBuy = True;
              FlagSell= True;
              //assign new trading strategy parameter       
@@ -391,6 +393,7 @@ int start()
              VolBasedTPMultiplier = VolBasedTPMultiplierRAV;
            }
          
+         //TradeAllowed for this robot will only look for Macroeconomic Events
          TradeAllowed = ReadCommandFromCSV(MagicNumber);              //read command from R to make sure trading is allowed
 
        
